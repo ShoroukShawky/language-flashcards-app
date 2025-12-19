@@ -21,8 +21,9 @@ class _AddWordScreenState extends State<AddWordScreen> {
         title: Text('Add New Word'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(20),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextField(
               controller: wordController,
@@ -31,7 +32,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
                 labelText: 'Word (Spanish)',
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 30),
             TextField(
               controller: meaningController,
               decoration: InputDecoration(
@@ -39,7 +40,7 @@ class _AddWordScreenState extends State<AddWordScreen> {
                 labelText: 'Meaning (English)',
               ),
             ),
-            SizedBox(height: 20),
+            SizedBox(height: 50),
             ElevatedButton(
               onPressed: () {
                 String newWord = wordController.text.trim();
@@ -95,7 +96,8 @@ class _AddWordScreenState extends State<AddWordScreen> {
                   ),
                 );
               },
-              child: Text('Save'),
+              style: ElevatedButton.styleFrom(minimumSize: Size(100, 40)),
+              child: Text('Save',style: TextStyle(fontSize: 20),),
             ),
           ],
         ),

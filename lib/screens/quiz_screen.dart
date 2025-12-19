@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import '../models/word.dart';
 
@@ -35,98 +37,109 @@ class _QuizScreenState extends State<QuizScreen> {
         title: Text('Quiz'),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // السؤال
-            Text(
-              'What is the meaning of "${widget.words[index].text}"?',
-              style: TextStyle(fontSize: 20),
-            ),
-
-            SizedBox(height: 20),
-
-            // الإجابة
-            TextField(
-              controller: answerController,
-              enabled: !answered,
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Your Answer',
-              ),
-            ),
-
-            SizedBox(height: 20),
-
-            // زر Submit
-            ElevatedButton(
-              onPressed: answered
-                  ? null
-                  : () {
-                      setState(() {
-                        answered = true;
-
-                        if (answerController.text.trim() ==
-                            widget.words[index].meaning) {
-                          score++;
-                          isCorrect = true;
-                        } else {
-                          isCorrect = false;
-                          correctAnswer = widget.words[index].meaning;
-                        }
-                      });
-                    },
-              child: Text('Submit'),
-            ),
-
-            SizedBox(height: 20),
-
-            // Feedback
-            if (answered && isCorrect)
-              Icon(
-                Icons.check_circle,
-                color: Colors.green,
-                size: 50,
-              ),
-
-            if (answered && !isCorrect) ...[
-              Icon(
-                Icons.cancel,
-                color: Colors.red,
-                size: 50,
-              ),
-              SizedBox(height: 10),
+        padding: const EdgeInsets.all(20),
+        child: Center(
+          child: Column(
+            
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              // السؤال
               Text(
-                'Correct answer: $correctAnswer',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.red,
-                  fontWeight: FontWeight.bold,
+                'What is the meaning of "${widget.words[index].text}"?',
+                style: TextStyle(fontSize: 28),
+              ),
+          
+              SizedBox(height: 50),
+          
+              // الإجابة
+              TextField(
+                controller: answerController,
+                enabled: !answered,
+                decoration: InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Your Answer',
                 ),
               ),
-            ],
-
-            Spacer(),
-
-            // زر Next
-            if (answered)
+          
+              SizedBox(height: 30),
+          
+              // زر Submit
               ElevatedButton(
-                onPressed: () {
-                  if (index == widget.words.length - 1) {
-                    _showResultDialog();
-                  } else {
-                    setState(() {
-                      index++;
-                      answered = false;
-                      isCorrect = false;
-                      answerController.clear();
-                    });
-                  }
-                },
-                child: Text('Next'),
+                
+                onPressed: answered
+                    ? null
+                    : () {
+                        setState(() {
+                          answered = true;
+          
+                          if (answerController.text.trim().toLowerCase() ==
+                              widget.words[index].meaning.toLowerCase()) {
+                            score++;
+                            isCorrect = true;
+                          } else {
+                            isCorrect = false;
+                            correctAnswer = widget.words[index].meaning;
+                          }
+                        });
+                      },
+                style:ElevatedButton.styleFrom(fixedSize: Size(100, 40),),
+                child: Text('Submit'),
               ),
-          ],
+          
+              SizedBox(height: 20),
+          
+              // Feedback
+              if (answered && isCorrect)
+                Icon(
+                  Icons.check_circle,
+                  color: Colors.green,
+                  size: 50,
+                ),
+          
+              if (answered && !isCorrect) ...[
+                Icon(
+                  Icons.cancel,
+                  color: Colors.red,
+                  size: 50,
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Correct answer: $correctAnswer',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.red,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+          SizedBox(height: 10),
+          
+              // زر Next
+              if (answered)
+                ElevatedButton(
+                  onPressed: () {
+                    if (index == widget.words.length - 1) {
+                      _showResultDialog();
+                    } else {
+                      setState(() {
+                        index++;
+                        answered = false;
+                        isCorrect = false;
+                        answerController.clear();
+                      });
+                    }
+                  },
+                  style:ElevatedButton.styleFrom(fixedSize: Size(100, 40),),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                    Text('next'),
+                    SizedBox(width: 5),
+                    Icon(Icons.navigate_next)
+                  ],)
+                ),
+            ],
+          ),
         ),
       ),
     );

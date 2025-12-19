@@ -26,34 +26,53 @@ class _FlashcardScreenState extends State<FlashcardScreen> {
     return Scaffold(
       appBar: AppBar(title: Text('Flashcards')),
       body: Center(
+        
         child: GestureDetector(
           onTap: () {
             setState(() => showMeaning = !showMeaning);
           },
+          
           child: Card(
             elevation: 5,
             child: Container(
-              width: 250,
-              height: 150,
+              width: 350,
+              height: 240,
               alignment: Alignment.center,
               child: Text(
                 showMeaning
                     ? widget.words[index].meaning
                     : widget.words[index].text,
-                style: TextStyle(fontSize: 24),
+                style: TextStyle(fontSize: 40),
               ),
             ),
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.navigate_next),
-        onPressed: () {
-          setState(() {
-            index = (index + 1) % widget.words.length;
-            showMeaning = false;
-          });
-        },
+      floatingActionButton: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        spacing:15 ,
+        children: [
+          FloatingActionButton(
+            child: Icon(Icons.navigate_before),
+            onPressed: () {
+              setState(() {
+                index = (index - 1) % widget.words.length;
+                showMeaning = false;
+              });
+            },
+          ),
+          Text('${index+1}/${widget.words.length}'),
+          FloatingActionButton(
+            child: Icon(Icons.navigate_next),
+            onPressed: () {
+              setState(() {
+                index = (index + 1) % widget.words.length;
+                showMeaning = false;
+              });
+            },
+          ),
+          
+        ],
       ),
     );
   }

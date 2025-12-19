@@ -31,47 +31,56 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(title: Text('Language Flashcards App')),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                // ➡️ تمرير ال List للـ QuizScreen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => QuizScreen(words: words),
-                  ),
-                );
-              },
-              child: Text('Start Quiz'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // ➡️ تمرير ال List للـ FlashcardsScreen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(words: words),
-                  ),
-                );
-              },
-              child: Text('View Flashcards'),
-            ),
-            SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                // ➡️ تمرير ال List للـ AddWordScreen
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => AddWordScreen(words: words),
-                  ),
-                );
-              },
-              child: Text('Add New Word'),
-            ),
-          ],
+        child: Center(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              ElevatedButton(
+                
+                onPressed: () {
+                  // ➡️ تمرير ال List للـ QuizScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => QuizScreen(words: words),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(minimumSize: Size(160, 40)),
+                child: Text('Start Quiz'),
+                
+              ),
+              SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () {
+                  // ➡️ تمرير ال List للـ FlashcardsScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => FlashcardScreen(words: words),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(minimumSize: Size(160, 40)),
+                child: Text('View Flashcards'),
+              ),
+              SizedBox(height: 40),
+              ElevatedButton(
+                onPressed: () {
+                  // ➡️ تمرير ال List للـ AddWordScreen
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => AddWordScreen(words: words),
+                    ),
+                  );
+                },
+                style: ElevatedButton.styleFrom(minimumSize: Size(160, 40)),
+                child: Text('Add New Word'),
+              ),
+            ],
+          ),
         ),
       ),
     );
