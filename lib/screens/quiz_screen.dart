@@ -13,9 +13,13 @@ class QuizScreen extends StatefulWidget {
 class _QuizScreenState extends State<QuizScreen> {
   int index = 0;
   int score = 0;
-  bool showCorrect = false;
 
-  final answerController = TextEditingController();
+  bool answered = false;
+  bool isCorrect = false;
+
+  String correctAnswer = '';
+
+  final TextEditingController answerController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,22 +33,13 @@ class _QuizScreenState extends State<QuizScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Quiz'),
-        actions: [
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Center(
-              child: Text(
-                'Score: $score',
-                style: TextStyle(fontSize: 18),
-              ),
-            ),
-          )
-        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
+            // السؤال
             Text(
               'What is the meaning of "${widget.words[index].text}"?',
               style: TextStyle(fontSize: 20),
@@ -52,8 +47,10 @@ class _QuizScreenState extends State<QuizScreen> {
 
             SizedBox(height: 20),
 
+            // الإجابة
             TextField(
               controller: answerController,
+              enabled: !answered,
               decoration: InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Your Answer',
@@ -62,40 +59,128 @@ class _QuizScreenState extends State<QuizScreen> {
 
             SizedBox(height: 20),
 
+            // زر Submit
             ElevatedButton(
+              onPressed: answered
+                  ? null
+                  : () {
+                      setState(() {
+                        answered = true;
+
+                        if (answerController.text.trim() ==
+                            widget.words[index].meaning) {
+                          score++;
+                          isCorrect = true;
+                        } else {
+                          isCorrect = false;
+                          correctAnswer = widget.words[index].meaning;
+                        }
+                      });
+                    },
               child: Text('Submit'),
-              onPressed: () {
-                setState(() {
-                  if (answerController.text.trim() ==
-                      widget.words[index].meaning) {
-                    score++;
-                    showCorrect = true;
-                  } else {
-                    showCorrect = false;
-                  }
-
-                  answerController.clear();
-
-                  index++;
-
-                  if (index >= widget.words.length) {
-                    index = 0;
-                    score = 0;
-                  }
-                });
-              },
             ),
 
             SizedBox(height: 20),
 
-            if (showCorrect)
+            // Feedback
+            if (answered && isCorrect)
               Icon(
                 Icons.check_circle,
                 color: Colors.green,
                 size: 50,
               ),
+
+            if (answered && !isCorrect) ...[
+              Icon(
+                Icons.cancel,
+                color: Colors.red,
+                size: 50,
+              ),
+              SizedBox(height: 10),
+              Text(
+                'Correct answer: $correctAnswer',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+
+            Spacer(),
+
+            // زر Next
+            if (answered)
+              ElevatedButton(
+                onPressed: () {
+                  if (index == widget.words.length - 1) {
+                    _showResultDialog();
+                  } else {
+                    setState(() {
+                      index++;
+                      answered = false;
+                      isCorrect = false;
+                      answerController.clear();
+                    });
+                  }
+                },
+                child: Text('Next'),
+              ),
           ],
         ),
+      ),
+    );
+  }
+
+  // 🟦 Dialog النتيجة
+  void _showResultDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (_) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: Center(
+          child: Text(
+            'Quiz Finished 🎉',
+            style: TextStyle(fontWeight: FontWeight.bold),
+          ),
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.emoji_events,
+              color: Colors.amber,
+              size: 60,
+            ),
+            SizedBox(height: 10),
+            Text(
+              'Your Score',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 5),
+            Text(
+              '$score / ${widget.words.length}',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          Center(
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.pop(context); // يقفل الـ dialog
+                Navigator.pop(context); // يطلع من صفحة الـ quiz
+              },
+              child: Text('Exit'),
+            ),
+          )
+        ],
       ),
     );
   }

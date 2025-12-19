@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'flashcard_screen.dart';
+import '../models/word.dart';
 import 'add_word.dart';
 import 'quiz_screen.dart';
-import '../models/word.dart';
+import 'flashcard_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -10,42 +10,32 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  List<Word> words = [];
+
+  // ✅ هنا بنعمل List<Word> اللي هتمرر لكل الصفحات
+  List<Word> words = [
+    Word(text: 'Hola', meaning: 'Hello'),
+    Word(text: 'Gracias', meaning: 'Thank you'),
+    Word(text: 'Adiós', meaning: 'Goodbye'),
+    Word(text: 'Por favor', meaning: 'Please'),
+    Word(text: 'Amor', meaning: 'Love'),
+    Word(text: 'Casa', meaning: 'House'),
+    Word(text: 'Agua', meaning: 'Water'),
+    Word(text: 'Libro', meaning: 'Book'),
+    Word(text: 'Amigo', meaning: 'Friend'),
+    Word(text: 'Escuela', meaning: 'School'),
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Language Flashcards')),
-      body: Center(
+      appBar: AppBar(title: Text('Language Flashcards App')),
+      body: Padding(
+        padding: const EdgeInsets.all(16),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             ElevatedButton(
-              child: Text('Learn Flashcards'),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => FlashcardScreen(words: words),
-                  ),
-                );
-              },
-            ),
-            ElevatedButton(
-              child: Text('Add New Word'),
-              onPressed: () async {
-                final newWord = await Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (_) => AddWordScreen()),
-                );
-                if (newWord != null) {
-                  setState(() => words.add(newWord));
-                }
-              },
-            ),
-            ElevatedButton(
-              child: Text('Quiz Mode'),
-              onPressed: () {
+                // ➡️ تمرير ال List للـ QuizScreen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -53,6 +43,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 );
               },
+              child: Text('Start Quiz'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // ➡️ تمرير ال List للـ FlashcardsScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => FlashcardScreen(words: words),
+                  ),
+                );
+              },
+              child: Text('View Flashcards'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                // ➡️ تمرير ال List للـ AddWordScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => AddWordScreen(words: words),
+                  ),
+                );
+              },
+              child: Text('Add New Word'),
             ),
           ],
         ),
